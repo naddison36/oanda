@@ -1,0 +1,27 @@
+{
+    "name": "oanda",
+    "version": "0.0.1",
+    "description": "Node.js wrapper for OANDA's REST API",
+    "main": "index.js",
+    "dependencies": {
+        "request": "~2.67.0",
+        "underscore": "~1.8.3",
+        "verror": "~1.6.0"
+    },
+    "keywords": [
+        "OANDA",
+        "API",
+        "forex",
+        "FX",
+        "currency",
+        "CFD",
+        "trading",
+        "hedging"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/naddison36/oanda"
+    },
+    "author": "Nick Addison",
+    "license": "MIT"
+}
