@@ -47,7 +47,7 @@ OANDA.prototype.request = function(method, path, params, data, callback)
         method: method,
         headers: headers,
         qs: params,
-        json: data
+        form: data
     };
 
     var requestDesc = util.format('%s request to url %s with params %s',
@@ -55,7 +55,7 @@ OANDA.prototype.request = function(method, path, params, data, callback)
 
     request(options, function(err, response, data)
     {
-        var error = null;
+        var error = null, json;
 
         if (err)
         {
@@ -74,14 +74,15 @@ OANDA.prototype.request = function(method, path, params, data, callback)
                 response.statusCode, requestDesc);
             error.name = response.statusCode;
         }
-        // if request was not able to parse json response into an object
-        else if (!_.isObject(data) )
-        {
-            error = new VError('%s could not parse response from %s\nResponse: %s', functionName, requestDesc, data);
-            error.name = data;
+
+        try {
+            json = JSON.parse(data);
+        }
+        catch (err) {
+            return callback(new VError(err, '%s could not parse response from %s\nResponse: %s', functionName, requestDesc, data));
         }
 
-        callback(error, data);
+        callback(error, json);
     });
 };
 
@@ -213,6 +214,19 @@ OANDA.prototype.getOpenPositions = function getOpenPositions(accountId, callback
         "/v1/accounts/" + accountId + "/positions",
         {},
         {},
+        callback);
+};
+
+OANDA.prototype.createMarketOrder = function createMarketOrder(accountId, instrument, side, units, callback)
+{
+    this.request(
+        "POST",
+        "/v1/accounts/" + accountId + "/orders",
+        {},
+        {instrument: instrument,
+        side: side,
+        units: units,
+        type: 'market'},
         callback);
 };
 

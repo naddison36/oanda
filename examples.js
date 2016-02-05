@@ -38,3 +38,6 @@ var oandaClient = new Oanda(accessToken, "practice");
 //oandaClient.getAccountInfo(accountId, console.log);
 
 //oandaClient.getOpenPositions(accountId, console.log);
+
+//oandaClient.createMarketOrder(accountId, 'AUD_USD', 'buy', 100, console.log);
+//oandaClient.createMarketOrder(accountId, 'AUD_USD', 'sell', 33, console.log);
