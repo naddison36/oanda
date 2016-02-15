@@ -62,16 +62,10 @@ OANDA.prototype.request = function(method, path, params, data, callback)
             error = new VError(err, '%s failed %s', functionName, requestDesc);
             error.name = err.code;
         }
-        else if (_.has(data, 'message'))
-        {
-            error = new VError('%s API returned error code %s from %s. Error message: %s', functionName,
-                data.code, requestDesc, data.message);
-            error.name = data.message;
-        }
         else if (response.statusCode < 200 || response.statusCode >= 300)
         {
-            error = new VError('%s HTTP status code %s returned from %s.', functionName,
-                response.statusCode, requestDesc);
+            error = new VError('%s HTTP status code %s returned from %s. Response: %s', functionName,
+                response.statusCode, requestDesc, data);
             error.name = response.statusCode;
         }
 
@@ -80,6 +74,13 @@ OANDA.prototype.request = function(method, path, params, data, callback)
         }
         catch (err) {
             return callback(new VError(err, '%s could not parse response from %s\nResponse: %s', functionName, requestDesc, data));
+        }
+
+        if (_.has(data, 'message'))
+        {
+            error = new VError('%s API returned error code %s from %s. Error message: %s', functionName,
+                data.code, requestDesc, data.message);
+            error.name = data.message;
         }
 
         callback(error, json);
