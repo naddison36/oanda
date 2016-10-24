@@ -1,4 +1,4 @@
-var Oanda = require('oanda');
+var Oanda = require('oanda').default;
 
 var oneMinuteAgo = new Date();
 
@@ -17,8 +17,8 @@ var oandaClient = new Oanda(accessToken, "practice");
 // uncomment the API you want to test.
 // Be sure to check the parameters so you don't do any unwanted live trades
 
-//oandaClient.getInstruments(accountId, console.log);
-//oandaClient.getInstruments(accountId, console.log, ["AUD_USD","USD_CNH"], ["displayName","precision,pip,marginRate"]);
+// oandaClient.getInstruments(accountId, console.log);
+// oandaClient.getInstruments(accountId, console.log, ["AUD_USD","USD_CNH"], ["displayName","precision,pip,marginRate"]);
 
 //oandaClient.getPrices(["AUD_USD","USD_CNH"], console.log);
 //oandaClient.getPrices(["AUD_USD","USD_CNH"], console.log, oneMinuteAgo);
@@ -33,11 +33,11 @@ var oandaClient = new Oanda(accessToken, "practice");
 //    candleFormat: 'midpoint'
 //});
 
-//oandaClient.getAccounts(console.log);
+// oandaClient.getAccounts(console.log);
 
 //oandaClient.getAccountInfo(accountId, console.log);
 
 //oandaClient.getOpenPositions(accountId, console.log);
 
-//oandaClient.createMarketOrder(accountId, 'AUD_USD', 'buy', 100, console.log);
-//oandaClient.createMarketOrder(accountId, 'AUD_USD', 'sell', 33, console.log);
+// oandaClient.createMarketOrder(accountId, 'AUD_USD', 'buy', 5000, console.log);
+// oandaClient.createMarketOrder(accountId, 'AUD_USD', 'sell', 33, console.log);
