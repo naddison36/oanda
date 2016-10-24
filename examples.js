@@ -23,7 +23,7 @@ var oandaClient = new Oanda(accessToken, "practice");
 //oandaClient.getPrices(["AUD_USD","USD_CNH"], console.log);
 //oandaClient.getPrices(["AUD_USD","USD_CNH"], console.log, oneMinuteAgo);
 
-//oandaClient.getCandles("AUD_USD", console.log);
+// oandaClient.getCandles("AUD_USD", console.log);
 //oandaClient.getCandles("AUD_USD", console.log, {
 //    start: new Date(2015, 1, 1, 16),
 //    end: new Date(2015, 3, 1, 16),
@@ -35,9 +35,9 @@ var oandaClient = new Oanda(accessToken, "practice");
 
 // oandaClient.getAccounts(console.log);
 
-//oandaClient.getAccountInfo(accountId, console.log);
+// oandaClient.getAccountInfo(accountId, console.log);
 
-//oandaClient.getOpenPositions(accountId, console.log);
+// oandaClient.getOpenPositions(accountId, console.log);
 
-// oandaClient.createMarketOrder(accountId, 'AUD_USD', 'buy', 5000, console.log);
+// oandaClient.createMarketOrder(accountId, 'AUD_USD', 'buy', 100, console.log);
 // oandaClient.createMarketOrder(accountId, 'AUD_USD', 'sell', 33, console.log);

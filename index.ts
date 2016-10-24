@@ -22,6 +22,13 @@ type Instrument = {
     interestRate: string
 }
 
+type Account = {
+    accountId: number,
+    accountName: string,
+    accountCurrency: string,
+    marginRate: number
+}
+
 type AccountInfo = {
     accountId: number,
     accountName: string,
@@ -34,6 +41,65 @@ type AccountInfo = {
     openOrders: number,
     marginRate: number,
     accountCurrency: string
+}
+
+type Position = {
+    instrument: string,
+    units: number,
+    side: string,
+    avgPrice: number
+}
+
+type Price = {
+    instrument: string,
+    time: string,  // time in RFC3339 format
+    bid: number,
+    ask: number
+}
+
+type Candle = {
+    time: string,  // time in RFC3339 format
+    openBid?: number,
+    openMid?: number,
+    openAsk?: number,
+    highBid?: number,
+    highMid?: number,
+    highAsk?: number,
+    lowBid?: number,
+    lowMid?: number,
+    lowAsk?: number,
+    closeBid?: number,
+    closeMid?: number,
+    closeAsk?: number,
+    volume: number,
+    complete: bool
+}
+
+type Candles = {
+    instrument: string,
+    granularity: number,
+    candles: Candle[]
+}
+
+type Trade = {
+    id: number,
+    units: number,
+    side: 'buy' | 'sell'
+}
+
+type NewOrderResponse = {
+    instrument: string,
+    time: string,  // time in RFC3339 format
+    price: number,
+    tradeOpened: {
+        id: number,
+        units: number,
+        side: 'buy' | 'sell',
+        takeProfit: number,
+        stopLoss: number,
+        trailingStop: number },
+    tradesClosed: Trade[],
+    tradeReduced: Trade
 }
 
 export default class OANDA
@@ -118,7 +184,7 @@ export default class OANDA
         });
     }
 
-    getInstruments(accountId: string, callback: (err: Error, instruments: {instruments: Instrument[]})=> void,
+    getInstruments(accountId: string, callback: (err: Error, instruments?: {instruments: Instrument[]})=> void,
                    instruments: string[], fields: string[])
     {
         if ( _.isArray(instruments) )
@@ -143,7 +209,7 @@ export default class OANDA
             callback);
     }
 
-    getPrices(instruments: string[], callback: (err: Error)=> void, since: Date): void
+    getPrices(instruments: string[], callback: (err: Error, prices?: {prices: Price[]} )=> void, since: Date): void
     {
         if ( _.isArray(instruments) )
         {
@@ -166,7 +232,7 @@ export default class OANDA
             callback);
     }
 
-    getPrice(instrument: string, callback: (err: Error)=> void, since: Date): void
+    getPrice(instrument: string, callback: (err: Error, price?: Price)=> void, since: Date): void
     {
         if ( _.isDate(since) )
         {
@@ -192,7 +258,7 @@ export default class OANDA
             });
     }
 
-    getCandles(instrument: string, callback: (err: Error)=>void, options)
+    getCandles(instrument: string, callback: (err: Error, candles?: Candles)=>void, options)
     {
         if (!options)
         {
@@ -219,7 +285,7 @@ export default class OANDA
             callback);
     }
 
-    getAccounts(callback: (err: Error)=>void): void
+    getAccounts(callback: (err: Error, accounts?: {accounts: Account[]} )=>void): void
     {
         this.request(
             "GET",
@@ -239,7 +305,7 @@ export default class OANDA
             callback);
     };
 
-    getOpenPositions(accountId: string, callback: (err: Error)=>void)
+    getOpenPositions(accountId: string, callback: (err: Error, postitions?: {positions: Position[]} )=>void)
     {
         this.request(
             "GET",
@@ -249,7 +315,7 @@ export default class OANDA
             callback);
     };
 
-    createMarketOrder(accountId: string, instrument: string, side: 'sell' | 'buy', units: number, callback: (err: Error)=>void): void
+    createMarketOrder(accountId: string, instrument: string, side: 'sell' | 'buy', units: number, callback: (err: Error, result?: NewOrderResponse)=>void): void
     {
         this.request(
             "POST",
