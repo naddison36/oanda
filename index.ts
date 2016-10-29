@@ -159,25 +159,36 @@ export default class OANDA
                 error = new VError(err, '%s failed %s', functionName, requestDesc);
                 error.name = err.code;
             }
+
+            try {
+                json = JSON.parse(data);
+            }
+            catch (err)
+            {
+                if (response.statusCode < 200 || response.statusCode >= 300)
+                {
+                    error = new VError('%s HTTP status code %s returned from %s. Response: %s', functionName,
+                        response.statusCode, requestDesc, data);
+                    error.name = response.statusCode;
+                }
+                else
+                {
+                    return callback(new VError(err, '%s could not parse response from %s\nResponse: %s', functionName, requestDesc, data));
+                }
+
+            }
+
+            if (json && json.message)
+            {
+                error = new VError('%s API returned error code %s from %s. Error message: %s', functionName,
+                    json.code, requestDesc, json.message);
+                error.name = json.message;
+            }
             else if (response.statusCode < 200 || response.statusCode >= 300)
             {
                 error = new VError('%s HTTP status code %s returned from %s. Response: %s', functionName,
                     response.statusCode, requestDesc, data);
                 error.name = response.statusCode;
-            }
-
-            try {
-                json = JSON.parse(data);
-            }
-            catch (err) {
-                return callback(new VError(err, '%s could not parse response from %s\nResponse: %s', functionName, requestDesc, data));
-            }
-
-            if (_.has(data, 'message'))
-            {
-                error = new VError('%s API returned error code %s from %s. Error message: %s', functionName,
-                    data.code, requestDesc, data.message);
-                error.name = data.message;
             }
 
             callback(error, json);
